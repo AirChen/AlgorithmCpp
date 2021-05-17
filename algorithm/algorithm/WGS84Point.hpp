@@ -29,6 +29,8 @@ class WGS84Point {
     double longitude;
     
 public:
+    WGS84Point() {};
+    
     WGS84Point(double lat, double lon): latitude(lat), longitude(lon)
     {
         assert(abs(lat) <= 90 || abs(lon) <= 180);

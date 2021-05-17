@@ -6,25 +6,26 @@
 //
 
 #include <iostream>
-
-#include "VincentyGeodesy.hpp"
-#include "WGS84Point.hpp"
+#include "GeoHash.hpp"
 
 using std::vector;
 using std::cout;
 using std::endl;
 int main(int argc, const char * argv[]) {
     
-    // hash test
-    WGS84Point a(47.2342, 15.7465465);
-    WGS84Point b{a};
-    WGS84Point c(-47.234, b.getLongitude());
-    WGS84Point d(-32.9687253, 12.42334242);
+    double lat = 40.390943;
+    double lon = 75.9375;
+    GeoHash hash = GeoHash::withCharacterPrecision(lat, lon, 12);
     
-    assert(a.hashCode() == a.hashCode());
-    assert(a.hashCode() == b.hashCode());
-    assert(a.hashCode() != c.hashCode());
-    assert(d.hashCode() != c.hashCode());
+    
+    cout << hash.toBase32() << endl;
+    cout << hash.toBinaryString() << endl;
+    cout << hash.toString() << endl;
+    
+    assert(0xcf6915015410500l == hash.ord());        
+    
+//    assertEquals(0xcf6915015410500l, hash.ord());
+//    assertTrue(hash.ord() >= 0);
     
     return 0;
 }

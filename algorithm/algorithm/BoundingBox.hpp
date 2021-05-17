@@ -31,6 +31,8 @@ class BoundingBox {
     }
     
 public:
+    BoundingBox() {};
+    
     BoundingBox(double southLatitude, double northLatitude, double westLongitude, double eastLongitude) {
         assert(southLatitude <= northLatitude);
 
