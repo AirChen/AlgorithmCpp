@@ -10,6 +10,8 @@
 		07A9249A2651FE3C0036BF61 /* SortTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07A924982651FE3C0036BF61 /* SortTests.cpp */; };
 		07A924C0265214BF0036BF61 /* Sort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B0E36C2648CE440036D463 /* Sort.cpp */; };
 		07A924C526521E2C0036BF61 /* PrimaryQueueTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07A924C326521E2C0036BF61 /* PrimaryQueueTests.cpp */; };
+		07A924CC26522DDD0036BF61 /* WGS84PointTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07A924CA26522DDD0036BF61 /* WGS84PointTests.cpp */; };
+		07A924D126522E8A0036BF61 /* VincentyGeodesy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B0E37D264E7C760036D463 /* VincentyGeodesy.cpp */; };
 		07B0E3652648CE230036D463 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B0E3642648CE230036D463 /* main.cpp */; };
 		07B0E36E2648CE440036D463 /* Sort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B0E36C2648CE440036D463 /* Sort.cpp */; };
 		07B0E374264B77190036D463 /* PrimaryQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B0E372264B77190036D463 /* PrimaryQueue.cpp */; };
@@ -47,6 +49,8 @@
 		07A924992651FE3C0036BF61 /* SortTests.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SortTests.hpp; sourceTree = "<group>"; };
 		07A924C326521E2C0036BF61 /* PrimaryQueueTests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PrimaryQueueTests.cpp; sourceTree = "<group>"; };
 		07A924C426521E2C0036BF61 /* PrimaryQueueTests.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PrimaryQueueTests.hpp; sourceTree = "<group>"; };
+		07A924CA26522DDD0036BF61 /* WGS84PointTests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WGS84PointTests.cpp; sourceTree = "<group>"; };
+		07A924CB26522DDD0036BF61 /* WGS84PointTests.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WGS84PointTests.hpp; sourceTree = "<group>"; };
 		07B0E3612648CE230036D463 /* algorithm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = algorithm; sourceTree = BUILT_PRODUCTS_DIR; };
 		07B0E3642648CE230036D463 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		07B0E36C2648CE440036D463 /* Sort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sort.cpp; sourceTree = "<group>"; };
@@ -132,6 +136,8 @@
 				07A924C326521E2C0036BF61 /* PrimaryQueueTests.cpp */,
 				07B0E39C264E9F0D0036D463 /* BoundingBoxTests.hpp */,
 				07B0E39B264E9F0D0036D463 /* BoundingBoxTests.cpp */,
+				07A924CB26522DDD0036BF61 /* WGS84PointTests.hpp */,
+				07A924CA26522DDD0036BF61 /* WGS84PointTests.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -234,6 +240,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07A924D126522E8A0036BF61 /* VincentyGeodesy.cpp in Sources */,
+				07A924CC26522DDD0036BF61 /* WGS84PointTests.cpp in Sources */,
 				07A924C0265214BF0036BF61 /* Sort.cpp in Sources */,
 				07B0E390264E9DC40036D463 /* main.cpp in Sources */,
 				07A9249A2651FE3C0036BF61 /* SortTests.cpp in Sources */,
