@@ -77,7 +77,7 @@ public:
     double getLongitudeSize() {
         if (eastLongitude == 180.0 && westLongitude == -180.0)
             return 360.0;
-        double size = (int)(eastLongitude - westLongitude) % 360;
+        double size = (eastLongitude - westLongitude) > 360.0 ? abs(eastLongitude - westLongitude - 360.0) : (eastLongitude - westLongitude);
         if (size < 0)
             size += 360.0;
         return size;
@@ -138,8 +138,6 @@ public:
      * Expands this bounding box to include the provided bounding box. The expansion is done in the direction with the minimal distance. If both distances are the same it'll expand
      * in east direction. It will not cross poles, but it will cross the 180-Meridian, if thats the shortest distance.<br>
      * If a precise specification of the northEast and southWest points is needed, please create a new bounding box where you can specify the points separately.
-     *
-     * @param other
      */
     void expandToInclude(BoundingBox& other) {
         // Expand Latitude
@@ -174,8 +172,8 @@ public:
         }
 
         // If this is not the case compute the distance between the endpoints in east direction
-        double distanceEastToOtherEast = (int)(other.eastLongitude - eastLongitude) % 360;
-        double distanceOtherWestToWest = (int)(westLongitude - other.westLongitude) % 360;
+        double distanceEastToOtherEast = (other.eastLongitude - eastLongitude) > 360.0 ? abs(other.eastLongitude - eastLongitude - 360.0) : (other.eastLongitude - eastLongitude);
+        double distanceOtherWestToWest = (westLongitude - other.westLongitude) > 360.0 ? abs(westLongitude - other.westLongitude - 360.0) : (westLongitude - other.westLongitude);
 
         // Fix for lower java versions, since the remainder-operator (%) changed in one version, idk which one
         if (distanceEastToOtherEast < 0)
