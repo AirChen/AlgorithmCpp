@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07A9249A2651FE3C0036BF61 /* SortTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07A924982651FE3C0036BF61 /* SortTests.cpp */; };
+		07A924C0265214BF0036BF61 /* Sort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B0E36C2648CE440036D463 /* Sort.cpp */; };
+		07A924C526521E2C0036BF61 /* PrimaryQueueTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07A924C326521E2C0036BF61 /* PrimaryQueueTests.cpp */; };
 		07B0E3652648CE230036D463 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B0E3642648CE230036D463 /* main.cpp */; };
 		07B0E36E2648CE440036D463 /* Sort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B0E36C2648CE440036D463 /* Sort.cpp */; };
 		07B0E374264B77190036D463 /* PrimaryQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B0E372264B77190036D463 /* PrimaryQueue.cpp */; };
@@ -40,6 +43,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		07A924982651FE3C0036BF61 /* SortTests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SortTests.cpp; sourceTree = "<group>"; };
+		07A924992651FE3C0036BF61 /* SortTests.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SortTests.hpp; sourceTree = "<group>"; };
+		07A924C326521E2C0036BF61 /* PrimaryQueueTests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PrimaryQueueTests.cpp; sourceTree = "<group>"; };
+		07A924C426521E2C0036BF61 /* PrimaryQueueTests.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PrimaryQueueTests.hpp; sourceTree = "<group>"; };
 		07B0E3612648CE230036D463 /* algorithm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = algorithm; sourceTree = BUILT_PRODUCTS_DIR; };
 		07B0E3642648CE230036D463 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		07B0E36C2648CE440036D463 /* Sort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sort.cpp; sourceTree = "<group>"; };
@@ -119,6 +126,10 @@
 			isa = PBXGroup;
 			children = (
 				07B0E38F264E9DC40036D463 /* main.cpp */,
+				07A924992651FE3C0036BF61 /* SortTests.hpp */,
+				07A924982651FE3C0036BF61 /* SortTests.cpp */,
+				07A924C426521E2C0036BF61 /* PrimaryQueueTests.hpp */,
+				07A924C326521E2C0036BF61 /* PrimaryQueueTests.cpp */,
 				07B0E39C264E9F0D0036D463 /* BoundingBoxTests.hpp */,
 				07B0E39B264E9F0D0036D463 /* BoundingBoxTests.cpp */,
 			);
@@ -223,7 +234,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07A924C0265214BF0036BF61 /* Sort.cpp in Sources */,
 				07B0E390264E9DC40036D463 /* main.cpp in Sources */,
+				07A9249A2651FE3C0036BF61 /* SortTests.cpp in Sources */,
+				07A924C526521E2C0036BF61 /* PrimaryQueueTests.cpp in Sources */,
 				07B0E39D264E9F0D0036D463 /* BoundingBoxTests.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -373,6 +387,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/3rd_part",
 				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -388,6 +403,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/3rd_part",
 				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

@@ -13,6 +13,23 @@ void Sort::exchange(vector<int> &as, int from, int to) {
     as[to] = t;
 }
 
+bool Sort::isOrdered(vector<int> &as) {
+    if (as.size() > 1) {
+        bool isReverse = (as[0] > as[1]);
+        for (int i = 1; i < as.size(); i++) {
+            if (isReverse && as[i-1] <= as[i]) {
+                return false;
+            }
+            
+            if (!isReverse && as[i-1] > as[i]) {
+                return false;
+            }
+        }
+    }
+    
+    return true;
+}
+
 void QuickSort::sort(vector<int> &as) {
     _sortImp(as, 0, static_cast<int>(as.size()-1));
 }
@@ -74,7 +91,7 @@ void QuickSort::_sort3WayImp(vector<int> &as, int lo, int hi) {
     int gt = hi;
     int i = lo+1;
     int base = as[lo];
-    while (i < gt) {
+    while (i <= gt) {
         if (as[i] < base) {
             exchange(as, lt++, i++);
         } else if (as[i] > base) {
@@ -84,8 +101,8 @@ void QuickSort::_sort3WayImp(vector<int> &as, int lo, int hi) {
         }
     }
     
-    _sortImp(as, lo, lt-1);
-    _sortImp(as, gt+1, hi);
+    _sort3WayImp(as, lo, lt-1);
+    _sort3WayImp(as, gt+1, hi);
 }
 
 void InsertionSort::sort(vector<int> &as) {

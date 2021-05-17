@@ -18,6 +18,9 @@ public:
     virtual void sort(vector<int>& as) = 0;
     
     void exchange(vector<int>& as, int from, int to);
+    bool isOrdered(vector<int>& as);
+    
+    ~Sort() {};
 };
 
 enum QuickSortType {
@@ -29,6 +32,7 @@ class QuickSort: public Sort {
 public:
     virtual void sort(vector<int>& as);
     void sort(vector<int>& as, QuickSortType type);
+    
 private:
     void _sortImp(vector<int>& as, int lo, int hi);
     void _sort3WayImp(vector<int>& as, int lo, int hi);
@@ -37,6 +41,8 @@ private:
 class InsertionSort: public Sort {
 public:
     virtual void sort(vector<int>& as);
+    
+    ~InsertionSort() {};
 };
 
 class SelectionSort: public Sort {

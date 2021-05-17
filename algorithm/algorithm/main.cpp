@@ -6,8 +6,6 @@
 //
 
 #include <iostream>
-#include "Sort.hpp"
-#include "PrimaryQueue.hpp"
 
 #include "VincentyGeodesy.hpp"
 #include "WGS84Point.hpp"
@@ -16,31 +14,6 @@ using std::vector;
 using std::cout;
 using std::endl;
 int main(int argc, const char * argv[]) {
-//    vector<int> vn = {6, 5, 2, 7, 3, 9, 8, 4, 10, 1 };
-    
-//    QuickSort sort;
-//    sort.sort(vn, QuickSortType_normal);
-    
-//    HeapSort sort;
-//    sort.sort(vn);
-//
-//    cout << "result: " << endl;
-//    for (auto num : vn) {
-//        cout << num << endl;
-//    }
-    
-//    PrimaryQueue<int>* pq = new PrimaryQueue<int>(3, PrimaryQueueType_MIN);
-//    for (auto v : vn) {
-//        pq->insert(v);
-//    }
-//
-//    do {
-//        cout << pq->top() << endl;
-//    } while (pq->delTop());
-//
-//    delete pq;
-    
-    
     
     // VincentyGeodesy test
     WGS84Point startPoint(40, 40);
