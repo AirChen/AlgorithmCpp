@@ -18,6 +18,10 @@ using std::fill;
 using std::vector;
 using std::string;
 
+static int count = 0;
+static char *base32;
+static int *decodeArray;
+
 class GeoHash {
 public:
     static const int MAX_BIT_PRECISION = 64;
@@ -27,27 +31,28 @@ public:
     constexpr static const int BITS[] = { 16, 8, 4, 2, 1 };
     static const int BASE32_BITS = 5;
     static const long FIRST_BIT_FLAGGED = 0x8000000000000000l;
-    
-private:
-    constexpr static const char base32[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'b', 'c', 'd', 'e', 'f',
-            'g', 'h', 'j', 'k', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
-
-    int *decodeArray;
 
     long bits = 0;
-    WGS84Point point;
-
-    BoundingBox boundingBox;
-
     int significantBits = 0;
+    
+private:
+    WGS84Point point;
+    BoundingBox boundingBox;
     
 public:
     GeoHash() {
-        initDecodeArray();
+        if (count == 0) {
+            initDecodeArray();
+        }
+        count++;
     }
     
     ~GeoHash() {
-        free(decodeArray);
+        count--;
+        if (count == 0) {
+            delete [] base32;
+            delete [] decodeArray;
+        }
     }
     
     static GeoHash withCharacterPrecision(double latitude, double longitude, int numberOfCharacters) {
@@ -60,12 +65,19 @@ public:
         return ans;
     }
     
-    int getSignificantBits() {
-        return significantBits;
+    static string geoHashStringWithCharacterPrecision(double latitude, double longitude, int numberOfCharacters) {
+        GeoHash hash = withCharacterPrecision(latitude, longitude, numberOfCharacters);
+        return hash.toBase32();
     }
-
-    long getLongValue() {
-        return bits;
+    
+    static GeoHash withBitPrecision(double latitude, double longitude, int numberOfBits) {
+        if (numberOfBits > MAX_BIT_PRECISION) {
+            printf("error: A Geohash can only be %d bits long! \n", MAX_BIT_PRECISION);
+        }
+        if (abs(latitude) > 90.0 || abs(longitude) > 180.0) {
+            printf("error: Can't have lat/lon values out of (-90,90)/(-180/180)\n");
+        }
+        return GeoHash(latitude, longitude, numberOfBits);
     }
     
     static GeoHash fromLongValue(long hashVal, int significantBits) {
@@ -97,6 +109,40 @@ public:
         return hash;
     }
     
+    static GeoHash fromGeohashString(string geohash) {
+        double latitudeRange[] = { -90.0, 90.0 };
+        double longitudeRange[] = { -180.0, 180.0 };
+
+        bool isEvenBit = true;
+        GeoHash hash;
+
+        int decodeArraySize = (int)sizeof(decodeArray)/sizeof(decodeArray[0]);
+        for (int i = 0; i < geohash.length(); i++) {
+            char c = geohash[i];
+            int cd = 0;
+            if (c >= decodeArraySize || (cd = decodeArray[c]) < 0) {
+                printf("error: Invalid character character '%c' in geohash '%s'! \n", c, geohash.c_str());
+            }
+            for (int j = 0; j < BASE32_BITS; j++) {
+                int mask = BITS[j];
+                if (isEvenBit) {
+                    divideRangeDecode(hash, longitudeRange, (cd & mask) != 0);
+                } else {
+                    divideRangeDecode(hash, latitudeRange, (cd & mask) != 0);
+                }
+                isEvenBit = !isEvenBit;
+            }
+        }
+
+        double latitude = (latitudeRange[0] + latitudeRange[1]) / 2;
+        double longitude = (longitudeRange[0] + longitudeRange[1]) / 2;
+
+        hash.point = {latitude, longitude};
+        setBoundingBox(hash, latitudeRange, longitudeRange);
+        hash.bits <<= (MAX_BIT_PRECISION - hash.significantBits);
+        return hash;
+    }
+    
     int getCharacterPrecision() {
         if (significantBits % 5 != 0) {
             printf("error: precision of GeoHash is not divisble by. \n");
@@ -105,7 +151,7 @@ public:
     }
     
     static long stepsBetween(GeoHash& one, GeoHash& two) {
-        if (one.getSignificantBits() != two.getSignificantBits()) {
+        if (one.significantBits != two.significantBits) {
             printf("error: It is only valid to compare the number of steps between two hashes if they have the same number of significant bits \n");
         }
         return two.ord() - one.ord();
@@ -130,14 +176,16 @@ public:
 
         string buf;
 
-        long firstFiveBitsMask = 0xf800000000000000l;
         long bitsCopy = bits;
         int partialChunks = (int)ceil(((double)significantBits / 5));
 
+        int leftMove = 59;
         for (int i = 0; i < partialChunks; i++) {
-            int pointer = (int)((bitsCopy & firstFiveBitsMask) >> 59);
-            buf += base32[pointer];
-            bitsCopy <<= 5;
+            int pointer = (int)((bitsCopy >> leftMove) & 31);
+            char chr = base32[pointer];
+            
+            buf += chr;
+            leftMove -= 5;
         }
         return buf;
     }
@@ -194,9 +242,16 @@ public:
         return bits >> insignificantBits;
     }
     
+    BoundingBox getBoundingBox() {
+        return boundingBox;
+    }
+    
 private:
     GeoHash(double latitude, double longitude, int desiredPrecision) {
-        initDecodeArray();
+        if (count == 0) {
+            initDecodeArray();
+        }
+        count++;
         
         point = {latitude, longitude};
         desiredPrecision = fmin(desiredPrecision, MAX_BIT_PRECISION);
@@ -219,10 +274,18 @@ private:
     }
     
     void initDecodeArray() {
-        int size = 'z' + 1;
-        decodeArray = (int*)malloc(sizeof(int) * size);
+        const int base32Size = 32;
+        const int size = 'z' + 1;
+                
+        base32 = new char[base32Size];
+        char tmp[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+        for (int i = 0; i < base32Size; i++) {
+            base32[i] = tmp[i];
+        }
+        
+        decodeArray = new int[size];
         fill(decodeArray, decodeArray + size, -1);
-        for (int i = 0; i < sizeof(base32)/sizeof(base32[0]); i++) {
+        for (int i = 0; i < base32Size; i++) {
             decodeArray[base32[i]] = i;
         }
     }
@@ -297,36 +360,13 @@ protected:
     void addOnBitToEnd() {
         significantBits++;
         bits <<= 1;
-        bits = bits | 0x1;
+        bits |= 0x1;
     }
 
     void addOffBitToEnd() {
         significantBits++;
         bits <<= 1;
-    }
-    
-    void getRightAlignedLatitudeBits(long* out) {
-        long copyOfBits = bits << 1;
-        int* latLonBits = (int *)malloc(2 * sizeof(int));
-        getNumberOfLatLonBits(latLonBits);
-        long value = extractEverySecondBit(copyOfBits, latLonBits[0]);
-        getNumberOfLatLonBits(latLonBits);
-        out[0] = value;
-        out[1] = latLonBits[0];
-        
-        free(latLonBits);
-    }
-
-    void getRightAlignedLongitudeBits(long* out) {
-        long copyOfBits = bits;
-        int* latLonBits = (int *)malloc(2 * sizeof(int));
-        getNumberOfLatLonBits(latLonBits);
-        long value = extractEverySecondBit(copyOfBits, latLonBits[1]);
-        getNumberOfLatLonBits(latLonBits);
-        out[0] = value;
-        out[1] = latLonBits[1];
-        
-        free(latLonBits);
+        bits &= ~(0x1);
     }
 
     long extractEverySecondBit(long copyOfBits, int numberOfBits) {
@@ -353,6 +393,30 @@ protected:
     }
     
 public:
+    void getRightAlignedLatitudeBits(long* out) {
+        long copyOfBits = bits << 1;
+        int* latLonBits = (int *)malloc(2 * sizeof(int));
+        getNumberOfLatLonBits(latLonBits);
+        long value = extractEverySecondBit(copyOfBits, latLonBits[0]);
+        getNumberOfLatLonBits(latLonBits);
+        out[0] = value;
+        out[1] = latLonBits[0];
+        
+        free(latLonBits);
+    }
+
+    void getRightAlignedLongitudeBits(long* out) {
+        long copyOfBits = bits;
+        int* latLonBits = (int *)malloc(2 * sizeof(int));
+        getNumberOfLatLonBits(latLonBits);
+        long value = extractEverySecondBit(copyOfBits, latLonBits[1]);
+        getNumberOfLatLonBits(latLonBits);
+        out[0] = value;
+        out[1] = latLonBits[1];
+        
+        free(latLonBits);
+    }
+    
     GeoHash getNorthernNeighbour() {
         long *latitudeBits = (long*)malloc(sizeof(long)*2);
         long *longitudeBits = (long*)malloc(sizeof(long)*2);
@@ -362,7 +426,10 @@ public:
         
         latitudeBits[0] += 1;
         latitudeBits[0] = maskLastNBits(latitudeBits[0], latitudeBits[1]);
-        return recombineLatLonBitsToHash(latitudeBits, longitudeBits);
+        GeoHash hash = recombineLatLonBitsToHash(latitudeBits, longitudeBits);
+        free(latitudeBits);
+        free(longitudeBits);
+        return hash;
     }
 
     GeoHash getSouthernNeighbour() {
@@ -374,7 +441,11 @@ public:
         
         latitudeBits[0] -= 1;
         latitudeBits[0] = maskLastNBits(latitudeBits[0], latitudeBits[1]);
-        return recombineLatLonBitsToHash(latitudeBits, longitudeBits);
+        GeoHash hash = recombineLatLonBitsToHash(latitudeBits, longitudeBits);
+        free(latitudeBits);
+        free(longitudeBits);
+        
+        return hash;
     }
 
     GeoHash getEasternNeighbour() {
@@ -386,7 +457,11 @@ public:
         
         longitudeBits[0] += 1;
         longitudeBits[0] = maskLastNBits(longitudeBits[0], longitudeBits[1]);
-        return recombineLatLonBitsToHash(latitudeBits, longitudeBits);
+        GeoHash hash = recombineLatLonBitsToHash(latitudeBits, longitudeBits);
+        free(latitudeBits);
+        free(longitudeBits);
+        
+        return hash;
     }
 
     GeoHash getWesternNeighbour() {
@@ -398,7 +473,26 @@ public:
         
         longitudeBits[0] -= 1;
         longitudeBits[0] = maskLastNBits(longitudeBits[0], longitudeBits[1]);
-        return recombineLatLonBitsToHash(latitudeBits, longitudeBits);
+        GeoHash hash = recombineLatLonBitsToHash(latitudeBits, longitudeBits);
+        free(latitudeBits);
+        free(longitudeBits);
+        
+        return hash;
+    }
+    
+    bool equals(GeoHash& obj) {
+        if (obj.significantBits == significantBits && obj.bits == bits) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    int hashCode() {
+        int f = 17;
+        f = 31 * f + (int) (bits ^ (bits >> 32));
+        f = 31 * f + significantBits;
+        return f;
     }
 };
 
