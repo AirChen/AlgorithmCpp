@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07299AAA265360B50069A95A /* GeoHashTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07299AA8265360B50069A95A /* GeoHashTests.cpp */; };
 		07A9249A2651FE3C0036BF61 /* SortTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07A924982651FE3C0036BF61 /* SortTests.cpp */; };
 		07A924C0265214BF0036BF61 /* Sort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07B0E36C2648CE440036D463 /* Sort.cpp */; };
 		07A924C526521E2C0036BF61 /* PrimaryQueueTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07A924C326521E2C0036BF61 /* PrimaryQueueTests.cpp */; };
@@ -46,6 +47,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		07299AA8265360B50069A95A /* GeoHashTests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GeoHashTests.cpp; sourceTree = "<group>"; };
+		07299AA9265360B50069A95A /* GeoHashTests.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GeoHashTests.hpp; sourceTree = "<group>"; };
 		07A924982651FE3C0036BF61 /* SortTests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SortTests.cpp; sourceTree = "<group>"; };
 		07A924992651FE3C0036BF61 /* SortTests.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SortTests.hpp; sourceTree = "<group>"; };
 		07A924C326521E2C0036BF61 /* PrimaryQueueTests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PrimaryQueueTests.cpp; sourceTree = "<group>"; };
@@ -143,6 +146,8 @@
 				07B0E39B264E9F0D0036D463 /* BoundingBoxTests.cpp */,
 				07A924CB26522DDD0036BF61 /* WGS84PointTests.hpp */,
 				07A924CA26522DDD0036BF61 /* WGS84PointTests.cpp */,
+				07299AA9265360B50069A95A /* GeoHashTests.hpp */,
+				07299AA8265360B50069A95A /* GeoHashTests.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -249,6 +254,7 @@
 				07A924D126522E8A0036BF61 /* VincentyGeodesy.cpp in Sources */,
 				07A924CC26522DDD0036BF61 /* WGS84PointTests.cpp in Sources */,
 				07A924C0265214BF0036BF61 /* Sort.cpp in Sources */,
+				07299AAA265360B50069A95A /* GeoHashTests.cpp in Sources */,
 				07B0E390264E9DC40036D463 /* main.cpp in Sources */,
 				07A9249A2651FE3C0036BF61 /* SortTests.cpp in Sources */,
 				07A924C526521E2C0036BF61 /* PrimaryQueueTests.cpp in Sources */,

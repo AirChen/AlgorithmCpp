@@ -11,21 +11,14 @@
 using std::vector;
 using std::cout;
 using std::endl;
-int main(int argc, const char * argv[]) {
-    
-    double lat = 40.390943;
-    double lon = 75.9375;
+int main(int argc, const char * argv[]) {    
+    double lat = -20.783236276;
+    double lon = 31.9867127312312;
     GeoHash hash = GeoHash::withCharacterPrecision(lat, lon, 12);
-    
     
     cout << hash.toBase32() << endl;
     cout << hash.toBinaryString() << endl;
     cout << hash.toString() << endl;
-    
-    assert(0xcf6915015410500l == hash.ord());        
-    
-//    assertEquals(0xcf6915015410500l, hash.ord());
-//    assertTrue(hash.ord() >= 0);
     
     return 0;
 }
