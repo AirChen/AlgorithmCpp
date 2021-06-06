@@ -7,11 +7,7 @@
 
 #include "Sort.hpp"
 
-void Sort::exchange(vector<int> &as, int from, int to) {
-    int t = as[from];
-    as[from] = as[to];
-    as[to] = t;
-}
+using std::swap;
 
 bool Sort::isOrdered(vector<int> &as) {
     if (as.size() > 1) {
@@ -73,11 +69,10 @@ void QuickSort::_sortImp(vector<int>& as, int lo, int hi) {
         if (i >= j) {
             break;
         }
-        exchange(as, i, j);
+        swap(as[i], as[j]);
     }
     
-    exchange(as, lo, j);
-    
+    swap(as[lo], as[j]);
     _sortImp(as, lo, j-1);
     _sortImp(as, j+1, hi);
 }
@@ -93,9 +88,9 @@ void QuickSort::_sort3WayImp(vector<int> &as, int lo, int hi) {
     int base = as[lo];
     while (i <= gt) {
         if (as[i] < base) {
-            exchange(as, lt++, i++);
+            swap(as[lt++], as[i++]);
         } else if (as[i] > base) {
-            exchange(as, gt--, i);
+            swap(as[gt--], as[i]);
         } else {
             i++;
         }
@@ -113,7 +108,7 @@ void InsertionSort::sort(vector<int> &as) {
     
     for (int i = 0 ; i < n; i++) {
         for (int j = i; j > 0 && (as[j] < as[j-1]); j--) {
-            exchange(as, j, j-1);
+            swap(as[j], as[j-1]);
         }
     }
 }
@@ -132,7 +127,7 @@ void SelectionSort::sort(vector<int> &as) {
             }
         }
         
-        exchange(as, minIdx, i);
+        swap(as[minIdx], as[i]);
     }
 }
 
@@ -150,7 +145,7 @@ void ShellSort::sort(vector<int> &as) {
     while (h >= 1) {
         for (int i = h; i < n; i++) {
             for (int j = i; j >= h && as[j] < as[j-h]; j-=h) {
-                exchange(as, j, j-h);
+                swap(as[j], as[j-h]);
             }
         }
         h = h/3;
@@ -213,13 +208,13 @@ void HeapSort::sort(vector<int> &as) {
     }
     
     while (n > 1) {
-        exchange(as, 1, n--);
+        swap(as[1], as[n--]);
         _sink(as, 1, n);
     }
     
     int idx = 0;
     while (idx < (as.size()-1) && as[idx] > as[idx+1]) {
-        exchange(as, idx, idx+1);
+        swap(as[idx], as[idx+1]);
         idx++;
     }
 }
@@ -237,7 +232,7 @@ void HeapSort::_sink(vector<int> &as, int cur, int n) {
         if (as[cur] > as[j]) {
             break;
         }
-        exchange(as, cur, j);
+        swap(as[cur], as[j]);        
         cur = j;
     }
 }

@@ -16,8 +16,6 @@ using std::vector;
 class Sort {
 public:
     virtual void sort(vector<int>& as) = 0;
-    
-    void exchange(vector<int>& as, int from, int to);
     bool isOrdered(vector<int>& as);
     
     ~Sort() {};
