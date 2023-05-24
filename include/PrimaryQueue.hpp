@@ -10,8 +10,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <algorithm>
 
-enum PrimaryQueueType {
+enum class PrimaryQueueType {
     PrimaryQueueType_MAX, // default
     PrimaryQueueType_MIN
 };
@@ -26,15 +27,15 @@ class PrimaryQueue {
     PrimaryQueueType _type;
     
     void _resize() {
-        if (_cur == _N-1) {
+        if (_cur == _N - 1) {
             _N += MEMSIZE;
+            _db = (T*)realloc(_db, _N);
         }
         
-        if (_cur == _N/2) {
-            _N = _N/2;
+        if (_cur < _N / 2) {
+            _N = _N / 2;
+            _db = (T*)realloc(_db, _N);
         }
-                
-        _db = (T*)realloc(_db, _N);
     }
     
     void _exchange(size_t from, size_t to)
@@ -48,10 +49,8 @@ class PrimaryQueue {
             printf("warming: from and to can't same!");
             return;
         }
-        
-        int t = _db[from];
-        _db[from] = _db[to];
-        _db[to] = t;
+       
+        std::swap(_db[from], _db[to]);
     }
     
     // return: true order; false not order
@@ -62,7 +61,7 @@ class PrimaryQueue {
             return false;
         }
         
-        return (_type == PrimaryQueueType_MAX) ? (_db[ldx] >= _db[rdx]) : (_db[ldx] <= _db[rdx]);
+        return (_type == PrimaryQueueType::PrimaryQueueType_MAX) ? (_db[ldx] >= _db[rdx]) : (_db[ldx] <= _db[rdx]);
     }
     
     void _sink(size_t idx) {
@@ -87,7 +86,7 @@ class PrimaryQueue {
     }
     
     void _swin(size_t idx) {
-        if (idx > _cur || idx < 0) {
+        if (idx > _cur || idx <= 0) {
             printf("error: out of range!");
             return;
         }
@@ -122,7 +121,7 @@ public:
         return true;
     }
     
-    PrimaryQueue(PrimaryQueueType type = PrimaryQueueType_MAX)
+    PrimaryQueue(PrimaryQueueType type = PrimaryQueueType::PrimaryQueueType_MAX)
     {
         _type = type;
         _N = MEMSIZE;
@@ -131,7 +130,7 @@ public:
         _db[0] = -1000;
     };
     
-    PrimaryQueue(size_t n, PrimaryQueueType type = PrimaryQueueType_MAX)
+    PrimaryQueue(size_t n, PrimaryQueueType type = PrimaryQueueType::PrimaryQueueType_MAX)
     {
         _type = type;
         _N = n;

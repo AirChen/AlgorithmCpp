@@ -32,7 +32,7 @@ TEST_F(PrimaryQueueTest, test_max_queue) {
 }
 
 TEST_F(PrimaryQueueTest, test_min_queue) {
-    PrimaryQueue<int>* pq = new PrimaryQueue<int>(3, PrimaryQueueType_MIN);
+    PrimaryQueue<int>* pq = new PrimaryQueue<int>(3, PrimaryQueueType::PrimaryQueueType_MIN);
     for (auto v : _vn) {
         pq->insert(v);
     }
